@@ -1,36 +1,44 @@
 const inquirer = require("inquirer"),
   mysql = require("mysql"),
-  cTable = require("console.table");
+  cTable = require("console.table"),
+  express = require("express"),
+  server = require("./server"),
+  Controller = require("./controllerFunctions");
 
 async function main() {
-  const con = await mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "password",
-    database: "emptracker_db"
-  });
-  await con.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected!");
-  });
+  const controller = await new Controller();
 
-  //   await con.query(
-  //     'INSERT INTO employee (first_name, last_name) VALUES ("kellen","Presta")',
-  //     function(error, results, fields) {
-  //       if (error) {
-  //         return connection.rollback(function() {
-  //           throw error;
-  //         });
-  //       }
-  //     }
-  //   );
+  const dispatchUserChoice = userchoice => {
+    switch (userchoice) {
+      case "View employees":
+        controller.viewEmployees();
 
-  con.query("SELECT * FROM `employee`", function(error, results, fields) {
-    // error will be an Error if one occurred during the query
-    // results will contain the results of the query
-    // fields will contain information about the returned results fields (if any)
-    console.log(results);
-  });
+      default:
+        return;
+    }
+  };
+  async function mainMenu() {
+    let uq = await inquirer.prompt({
+      message: "What do you want to do?",
+      name: "result",
+      type: "list",
+      choices: [
+        "Add new employee",
+        "View employees",
+        "Update employee roles",
+        "Exit"
+      ]
+    });
+
+    return uq.result;
+  }
+  let userChoice = await mainMenu();
+  dispatchUserChoice(userChoice);
+  controller.viewRoles();
+
+  //
 }
 
 main();
+
+module.exports = main.connection;
