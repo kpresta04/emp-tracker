@@ -1,5 +1,6 @@
 const mysql = require("mysql"),
-  cTable = require("console.table");
+  cTable = require("console.table"),
+  { test, test2 } = require("./testy");
 
 class Controller {
   constructor() {

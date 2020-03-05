@@ -3,7 +3,8 @@ const inquirer = require("inquirer"),
   cTable = require("console.table"),
   express = require("express"),
   server = require("./server"),
-  Controller = require("./controllerFunctions");
+  Controller = require("./Controller"),
+  { addNewEmployee } = require("./employeeFunctions");
 
 async function main() {
   const controller = await new Controller();
@@ -12,6 +13,12 @@ async function main() {
     switch (userchoice) {
       case "View employees":
         controller.viewEmployees();
+
+      case "Add new employee":
+        addNewEmployee(controller.connection);
+      case "Exit":
+        controller.connection.end();
+        process.exitCode = 0;
 
       default:
         return;
@@ -34,7 +41,7 @@ async function main() {
   }
   let userChoice = await mainMenu();
   dispatchUserChoice(userChoice);
-  controller.viewRoles();
+  // controller.viewRoles();
 
   //
 }
