@@ -8,7 +8,7 @@ exports.viewDepartments = connection => {
     result.forEach(el => {
       console.table({
         id: el.id,
-        Name: el.first_name
+        Name: el.name
       });
     });
   });

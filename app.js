@@ -8,7 +8,8 @@ const mysql = require("mysql"),
   {
     viewDepartments,
     addNewDepartment
-  } = require("./src/components/departmentFunctions");
+  } = require("./src/components/departmentFunctions"),
+  { viewRoles, addNewRole } = require("./src/components/roleFunctions");
 
 const mainMenu = async () => {
   const addSubMenu = async connection => {
@@ -29,8 +30,40 @@ const mainMenu = async () => {
           case "Department":
             await addNewDepartment(connection);
             mainMenu();
-
             return;
+          case "Role":
+            await addNewRole(connection);
+            mainMenu();
+            return;
+          default:
+            mainMenu();
+            return;
+        }
+      });
+  };
+  const viewSubMenu = async connection => {
+    inquirer
+      .prompt([
+        {
+          name: "result",
+          type: "list",
+          message: "What do you want to view?",
+          choices: ["Roles", "Departments", "Employees", "Cancel"]
+        }
+      ])
+      .then(async answers => {
+        switch (answers.result) {
+          case "Employees":
+            await viewEmployees(connection);
+            mainMenu();
+            return;
+          case "Departments":
+            await viewDepartments(connection);
+            mainMenu();
+            return;
+          case "Roles":
+            await viewRoles(connection);
+            mainMenu();
           default:
             mainMenu();
 
@@ -45,8 +78,7 @@ const mainMenu = async () => {
       message: "What do you want to do?",
       choices: [
         "Add department, role, or employee",
-        // "Add new employee",
-        "View employees",
+        "View department, role, or employees",
         "Update employee roles",
         "Delete employee",
         "Exit"
@@ -67,15 +99,9 @@ const mainMenu = async () => {
       });
 
       switch (answers.result) {
-        case "View employees":
-          await viewEmployees(connection);
-          //   console.log("Press arrow key to bring up menu");
+        case "View department, role, or employees":
+          await viewSubMenu(connection);
 
-          mainMenu();
-          return;
-        case "Add new employee":
-          await addNewEmployee(connection);
-          mainMenu();
           return;
         case "Add department, role, or employee":
           await addSubMenu(connection);
