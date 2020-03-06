@@ -4,7 +4,11 @@ const mysql = require("mysql"),
     addNewEmployee,
     deleteEmployee,
     viewEmployees
-  } = require("./src/components/employeeFunctions");
+  } = require("./src/components/employeeFunctions"),
+  {
+    viewDepartments,
+    addNewDepartment
+  } = require("./src/components/departmentFunctions");
 
 const mainMenu = async () => {
   const addSubMenu = async connection => {
@@ -21,6 +25,9 @@ const mainMenu = async () => {
         switch (answers.result) {
           case "Employee":
             await addNewEmployee(connection);
+            mainMenu();
+          case "Department":
+            await addNewDepartment(connection);
             mainMenu();
 
             return;
