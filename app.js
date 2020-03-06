@@ -2,7 +2,7 @@ const inquirer = require("inquirer"),
   mysql = require("mysql"),
   cTable = require("console.table"),
   express = require("express"),
-  Controller = require("./src/components/Controller"),
+  Controller = require("./src/Controller"),
   { addNewEmployee } = require("./src/components/employeeFunctions");
 
 async function main() {
