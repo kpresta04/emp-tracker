@@ -2,9 +2,8 @@ const inquirer = require("inquirer"),
   mysql = require("mysql"),
   cTable = require("console.table"),
   express = require("express"),
-  server = require("./server"),
-  Controller = require("./Controller"),
-  { addNewEmployee } = require("./employeeFunctions");
+  Controller = require("./src/components/Controller"),
+  { addNewEmployee } = require("./src/components/employeeFunctions");
 
 async function main() {
   const controller = await new Controller();
