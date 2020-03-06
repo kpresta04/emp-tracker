@@ -1,6 +1,6 @@
 const validator = require("validator");
 
-const intValidator = input => {
+exports.intValidator = input => {
   if (input === "Enter a number or press Enter to skip") {
     return true;
   } else if (!validator.isInt(input)) {
@@ -9,7 +9,7 @@ const intValidator = input => {
   return true;
 };
 
-const alphaValidator = input => {
+exports.alphaValidator = input => {
   if (input === "") {
     return "You must enter a name!";
   } else if (!validator.isAlpha(input)) {
