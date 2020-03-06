@@ -1,4 +1,5 @@
 const mysql = require("mysql"),
+  { intValidator } = require("./src/components/validators"),
   inquirer = require("inquirer"),
   {
     addNewEmployee,
@@ -9,9 +10,34 @@ const mysql = require("mysql"),
     viewDepartments,
     addNewDepartment
   } = require("./src/components/departmentFunctions"),
-  { viewRoles, addNewRole } = require("./src/components/roleFunctions");
+  {
+    viewRoles,
+    addNewRole,
+    updateEmployeeRole
+  } = require("./src/components/roleFunctions");
 
 const mainMenu = async () => {
+  const updateRoleSubMenu = async connection => {
+    inquirer
+      .prompt([
+        {
+          name: "empID",
+          type: "input",
+          message: "Enter the ID of the employee you wish to update: ",
+          validate: intValidator
+        },
+        {
+          name: "roleID",
+          type: "input",
+          message: "Enter the ID of the employees new role: ",
+          validate: intValidator
+        }
+      ])
+      .then(async answers => {
+        await updateEmployeeRole(connection, answers.empID, answers.roleID);
+        mainMenu();
+      });
+  };
   const addSubMenu = async connection => {
     inquirer
       .prompt([
@@ -107,7 +133,9 @@ const mainMenu = async () => {
           await addSubMenu(connection);
 
           return;
-
+        case "Update employee roles":
+          await updateRoleSubMenu(connection);
+          return;
         case "Delete employee":
           await deleteEmployee(connection);
           mainMenu();

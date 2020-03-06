@@ -51,3 +51,14 @@ exports.viewRoles = connection => {
   });
   connection.end();
 };
+exports.updateEmployeeRole = (connection, empID, roleID) => {
+  connection.query(
+    `UPDATE employee SET role_id =${roleID} WHERE id =${empID} ;`,
+    function(err, result) {
+      if (err) throw err;
+      //   console.log(result);
+
+      connection.end();
+    }
+  );
+};
