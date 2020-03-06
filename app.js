@@ -6,6 +6,7 @@ const inquirer = require("inquirer"),
   { addNewEmployee } = require("./src/components/employeeFunctions");
 
 async function main() {
+  running = true;
   const controller = await new Controller();
 
   const dispatchUserChoice = userchoice => {
@@ -38,8 +39,10 @@ async function main() {
 
     return uq.result;
   }
-  let userChoice = await mainMenu();
-  dispatchUserChoice(userChoice);
+  while (running) {
+    let userChoice = await mainMenu();
+    dispatchUserChoice(userChoice);
+  }
   // controller.viewRoles();
 
   //
