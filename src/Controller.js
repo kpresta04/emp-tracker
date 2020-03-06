@@ -12,11 +12,14 @@ class Controller {
 
     this.connection.connect(function(err) {
       if (err) throw err;
-      console.log("Connected!");
+      // console.log("Connected!");
     });
   }
-  viewEmployees() {
-    this.connection.query("SELECT * FROM employee", function(err, result) {
+  async viewEmployees() {
+    const done = await this.connection.query("SELECT * FROM employee", function(
+      err,
+      result
+    ) {
       if (err) throw err;
       //   console.log(result);
       result.forEach(el => {
@@ -29,6 +32,7 @@ class Controller {
         });
       });
     });
+    this.connection.end();
   }
   viewRoles() {
     this.connection.query("SELECT * FROM role", function(err, result) {

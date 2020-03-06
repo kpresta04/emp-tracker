@@ -1,8 +1,8 @@
 const validator = require("validator");
 
 exports.intValidator = input => {
-  if (input === "Enter a number or press Enter to skip") {
-    return true;
+  if (input === "") {
+    return "You must enter a number!";
   } else if (!validator.isInt(input)) {
     return "You can only enter a whole number!";
   }

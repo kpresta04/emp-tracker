@@ -25,30 +25,59 @@ const runEmployeePrompts = async () => {
       name: "manager_id",
       message: "Enter the ID of the employee's manager: ",
       type: "input",
-      validate: intValidator,
-      default: "Enter a number or press Enter to skip"
+      validate: intValidator
     }
   ]);
   // Transform answers
 
   answers.role_id = Number(answers.role_id.slice(0, 1)); // We only want the integer
-  if (answers.manager_id === "Enter a number or press Enter to skip") {
-    // Remove if default
-    answers.manager_id = null;
-  } else answers.manager_id = Number(answers.manager_id);
+  answers.manager_id = Number(answers.manager_id);
   return answers;
 };
-
+exports.deleteEmployee = async connection => {
+  let answers = await inquirer.prompt({
+    name: "delete_id",
+    message: "Enter the ID of the employee you wish to delete: ",
+    type: "input",
+    validate: intValidator
+  });
+  connection.query(
+    `delete from employee where id=${answers.delete_id}`,
+    function(err, result) {
+      if (err) throw err;
+      // console.log(result);
+      connection.end();
+    }
+  );
+};
+exports.viewEmployees = connection => {
+  connection.query("SELECT * FROM employee", function(err, result) {
+    if (err) throw err;
+    //   console.log(result);
+    result.forEach(el => {
+      console.table({
+        id: el.id,
+        First_Name: el.first_name,
+        Last_Name: el.last_name,
+        role_id: el.role_id,
+        manager_id: el.manager_id
+      });
+    });
+  });
+  connection.end();
+};
 exports.addNewEmployee = async connection => {
   const promptAnswers = await runEmployeePrompts();
   //   promptAnswers = await promptAnswers;
-  console.log("Answers:", promptAnswers);
+  // console.log("Answers:", promptAnswers);
 
-  //Employee columns: first_name, last_name, role_id, manager_id
-  //   connection.query(
-  //     "INSERT into employee (first_name, last_name, role_id) VALUES ('Joe','Myers', 2)",
-  //     function(err, result) {
-  //       if (err) throw err;
-  //     }
-  //   );
+  // Employee columns: first_name, last_name, role_id, manager_id
+  connection.query(
+    `INSERT into employee (first_name, last_name, role_id, manager_id) VALUES ("${promptAnswers.first_name}","${promptAnswers.last_name}","${promptAnswers.role_id}","${promptAnswers.manager_id}")`,
+    function(err, result) {
+      if (err) throw err;
+      // console.log("Press arrow key to bring up the menu");
+      connection.end();
+    }
+  );
 };
