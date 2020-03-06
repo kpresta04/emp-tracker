@@ -2,11 +2,11 @@ const inquirer = require("inquirer"),
   mysql = require("mysql"),
   cTable = require("console.table"),
   express = require("express"),
-  server = require("./server"),
-  Controller = require("./Controller"),
-  { addNewEmployee } = require("./employeeFunctions");
+  Controller = require("./src/Controller"),
+  { addNewEmployee } = require("./src/components/employeeFunctions");
 
 async function main() {
+  running = true;
   const controller = await new Controller();
 
   const dispatchUserChoice = userchoice => {
@@ -39,8 +39,10 @@ async function main() {
 
     return uq.result;
   }
-  let userChoice = await mainMenu();
-  dispatchUserChoice(userChoice);
+  while (running) {
+    let userChoice = await mainMenu();
+    dispatchUserChoice(userChoice);
+  }
   // controller.viewRoles();
 
   //
